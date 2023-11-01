@@ -53,11 +53,11 @@ public class BookService {
         if (book == null) {
             return new Response(false, "Book not found");
         }
-        if (book.getInventory() <= 0) {
+        if (!book.isInStock()) { // Updated line
             return new Response(false, "Book is out of stock");
         }
 
-        book.setInventory(book.getInventory() - 1);
+        book.setInStock(false); // Updated line
         bookRepository.save(book);
         return new Response(true, "Book purchased successfully");
     }
@@ -68,20 +68,18 @@ public class BookService {
             return new Response(false, "Book not found");
         }
 
-        if (book.getInventory() >= 1) {
+        if (book.isInStock()) { // Updated line
             return new Response(false, "Cannot sell the book. It's already in the inventory.");
         }
 
         book.setPrice(book.getPrice() * 0.9);
-        book.setInventory(1); // Increase the inventory by 1
+        book.setInStock(true); // Updated line
         bookRepository.save(book);
         return new Response(true, "Book sold successfully", book.getPrice());
     }
 
     public Response sellNewBook(Book book) {
-        // You can add other logic here, such as checking if the ISBN already exists,
-        // etc.
-        book.setInventory(1); // Set the inventory to 1
+        book.setInStock(true); // Set the book as in stock
         bookRepository.save(book);
         return new Response(true, "New book added successfully with price: " + book.getPrice());
     }
@@ -95,14 +93,16 @@ public class BookService {
             String isbn = book.getIsbn();
             if (bookMap.containsKey(isbn)) {
                 BookInventoryDTO existingBook = bookMap.get(isbn);
-                existingBook.setTotalInventory(existingBook.getTotalInventory() + 1);
+                if (book.isInStock()) { // Updated line
+                    existingBook.setTotalInventory(existingBook.getTotalInventory() + 1);
+                }
             } else {
                 BookInventoryDTO dto = new BookInventoryDTO();
                 dto.setIsbn(book.getIsbn());
                 dto.setAuthors(book.getAuthors());
                 dto.setTitle(book.getTitle());
                 dto.setEdition(book.getEdition());
-                dto.setTotalInventory(1);
+                dto.setTotalInventory(book.isInStock() ? 1 : 0); // Updated line
                 bookMap.put(isbn, dto);
             }
         });

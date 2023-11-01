@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.util.Objects;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 public class Book {
@@ -18,7 +20,7 @@ public class Book {
     private String title;
     private String edition;
     private Double price;
-    private int inventory;
+    private boolean inStock; // Renamed from 'inventory' and changed type
 
     public Book() {
     }
@@ -72,15 +74,21 @@ public class Book {
     }
 
     public void setPrice(Double price) {
-        this.price = price;
+        if (price != null) {
+            BigDecimal bd = new BigDecimal(price);
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+            this.price = bd.doubleValue();
+        } else {
+            this.price = null;
+        }
     }
 
-    public int getInventory() {
-        return inventory;
+    public boolean isInStock() { // Renamed from 'getInventory'
+        return inStock;
     }
 
-    public void setInventory(int inventory) {
-        this.inventory = inventory;
+    public void setInStock(boolean inStock) { // Renamed from 'setInventory'
+        this.inStock = inStock;
     }
 
     @Override
@@ -107,6 +115,7 @@ public class Book {
                 ", title='" + title + '\'' +
                 ", edition='" + edition + '\'' +
                 ", price=" + price +
+                ", inStock=" + inStock + // Updated this line
                 '}';
     }
 }

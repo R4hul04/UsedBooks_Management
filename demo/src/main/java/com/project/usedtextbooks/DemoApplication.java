@@ -26,7 +26,7 @@ public class DemoApplication {
 				book1.setTitle("A DOG'S LIFE");
 				book1.setEdition("1st Edition");
 				book1.setPrice(100.0);
-				book1.setInventory(1);
+				book1.setInStock(true);
 				bookRepository.save(book1);
 			}
 
