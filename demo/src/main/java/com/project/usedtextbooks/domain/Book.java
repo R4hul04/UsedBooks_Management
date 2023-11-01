@@ -21,6 +21,7 @@ public class Book {
     private String edition;
     private Double price;
     private boolean inStock; // Renamed from 'inventory' and changed type
+    private int purchaseCount = 0; // 初始化为0
 
     public Book() {
     }
@@ -89,6 +90,14 @@ public class Book {
 
     public void setInStock(boolean inStock) { // Renamed from 'setInventory'
         this.inStock = inStock;
+    }
+
+    public int getPurchaseCount() {
+        return purchaseCount;
+    }
+
+    public void setPurchaseCount(int purchaseCount) {
+        this.purchaseCount = purchaseCount;
     }
 
     @Override

@@ -53,11 +53,13 @@ public class BookService {
         if (book == null) {
             return new Response(false, "Book not found");
         }
-        if (!book.isInStock()) { // Updated line
+        if (!book.isInStock()) {
             return new Response(false, "Book is out of stock");
         }
 
-        book.setInStock(false); // Updated line
+        book.setInStock(false);
+        book.setPurchaseCount(book.getPurchaseCount() + 1); // 增加购买次数
+
         bookRepository.save(book);
         return new Response(true, "Book purchased successfully");
     }
