@@ -8,7 +8,6 @@ public class BookInventoryDTO {
     private String edition;
     private int totalInventory;
 
-    // Constructors
     public BookInventoryDTO() {
     }
 
@@ -60,7 +59,4 @@ public class BookInventoryDTO {
         this.totalInventory = totalInventory;
     }
 
-    // Getters and setters...
-
-    // ... other methods (if necessary) ...
 }

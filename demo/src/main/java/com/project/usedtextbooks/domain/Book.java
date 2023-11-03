@@ -20,8 +20,8 @@ public class Book {
     private String title;
     private String edition;
     private Double price;
-    private boolean inStock; // Renamed from 'inventory' and changed type
-    private int purchaseCount = 0; // 初始化为0
+    private boolean inStock;
+    private int purchaseCount = 0;
 
     public Book() {
     }
@@ -75,6 +75,7 @@ public class Book {
     }
 
     public void setPrice(Double price) {
+        // Rounds the price to 2 decimal places when setting the value
         if (price != null) {
             BigDecimal bd = new BigDecimal(price);
             bd = bd.setScale(2, RoundingMode.HALF_UP);
@@ -84,11 +85,11 @@ public class Book {
         }
     }
 
-    public boolean isInStock() { // Renamed from 'getInventory'
+    public boolean isInStock() {
         return inStock;
     }
 
-    public void setInStock(boolean inStock) { // Renamed from 'setInventory'
+    public void setInStock(boolean inStock) {
         this.inStock = inStock;
     }
 
@@ -124,7 +125,7 @@ public class Book {
                 ", title='" + title + '\'' +
                 ", edition='" + edition + '\'' +
                 ", price=" + price +
-                ", inStock=" + inStock + // Updated this line
+                ", inStock=" + inStock +
                 '}';
     }
 }
