@@ -2,7 +2,6 @@ package com.project.usedtextbooks.service;
 
 import com.project.usedtextbooks.domain.Book;
 import com.project.usedtextbooks.dto.BookInventoryDTO;
-import com.project.usedtextbooks.dto.Response;
 import com.project.usedtextbooks.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,42 +47,41 @@ public class BookService {
         }
     }
 
-    public Response buyBook(Long id) {
+    public String buyBook(Long id) {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
-            return new Response(false, "Book not found");
+            return "Book not found";
         }
         if (!book.isInStock()) {
-            return new Response(false, "Book is out of stock");
+            return "Book is out of stock";
         }
 
         book.setInStock(false);
-        book.setPurchaseCount(book.getPurchaseCount() + 1); // 增加购买次数
-
+        book.setPurchaseCount(book.getPurchaseCount() + 1);
         bookRepository.save(book);
-        return new Response(true, "Book purchased successfully");
+        return "Book purchased successfully";
     }
 
-    public Response sellBook(Long id) {
+    public String sellBook(Long id) {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
-            return new Response(false, "Book not found");
+            return "Book not found";
         }
 
-        if (book.isInStock()) { // Updated line
-            return new Response(false, "Cannot sell the book. It's already in the inventory.");
+        if (book.isInStock()) {
+            return "Cannot sell the book. It's already in the inventory.";
         }
 
-        book.setPrice(book.getPrice() * 0.9);
-        book.setInStock(true); // Updated line
+        book.setPrice(book.getPrice() * 0.9); // Assuming this is business logic for selling
+        book.setInStock(true);
         bookRepository.save(book);
-        return new Response(true, "Book sold successfully", book.getPrice());
+        return String.format("Book sold successfully with price: %.2f", book.getPrice());
     }
 
-    public Response sellNewBook(Book book) {
-        book.setInStock(true); // Set the book as in stock
+    public String sellNewBook(Book book) {
+        book.setInStock(true);
         bookRepository.save(book);
-        return new Response(true, "New book added successfully with price: " + book.getPrice());
+        return String.format("New book added successfully with price: %.2f", book.getPrice());
     }
 
     public List<BookInventoryDTO> getInventoryOfBooks() {

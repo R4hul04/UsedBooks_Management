@@ -2,7 +2,6 @@ package com.project.usedtextbooks.controller;
 
 import com.project.usedtextbooks.domain.Book;
 import com.project.usedtextbooks.dto.BookInventoryDTO;
-import com.project.usedtextbooks.dto.Response;
 import com.project.usedtextbooks.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,13 +44,16 @@ public class BookController {
         return bookService.updateBook(id, book);
     }
 
-    @PostMapping("/buy/{id}")
-    public Response buyBook(@PathVariable Long id) {
-        return bookService.buyBook(id);
+    @PostMapping("/buy")
+    public String buyBook(@RequestBody Book book) {
+        if (book.getId() == null) {
+            return "Book ID is required";
+        }
+        return bookService.buyBook(book.getId());
     }
 
     @PostMapping("/sell")
-    public Response sellBook(@RequestBody Book book) {
+    public String sellBook(@RequestBody Book book) {
         if (book.getId() != null) {
             return bookService.sellBook(book.getId());
         } else {
